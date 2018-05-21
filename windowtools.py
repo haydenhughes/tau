@@ -1,3 +1,11 @@
+"""
+Setting up a basic pyglet window.
+
+`width` is the width of the window in pixels.
+`height` is the height of the window in pixels.
+`fullscreen` is a 1 or 0 value that enables or disables fullscreen.
+`capture_mouse` is a boolean of wheather or not the window should capture the mouse
+"""
 import pyglet
 
 
