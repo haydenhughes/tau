@@ -2,7 +2,7 @@ import pyglet
 
 
 class Camera:
-    """Moves or scales viewport.
+    """Moves viewport.
 
     :Properties:
         `renderer` : tuple
