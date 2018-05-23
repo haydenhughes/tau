@@ -15,15 +15,6 @@ class Camera:
         self.y = 0
         self._zoom = 1
 
-    @property
-    def zoom(self):
-        """Scales the objects to simulate zoom.
-        Scale of 2 will draw sprites twice as large
-
-        :type: float
-        """
-        return self._zoom
-
     @zoom.setter
     def zoom(self, value):
         self._zoom = value

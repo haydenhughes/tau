@@ -20,9 +20,6 @@ class Renderer:
         self.game_objects = []
         self.group_list = [pyglet.graphics.OrderedGroup(
             x) for x in range(layers + 1)]
-        self.camera_offset_x = 0
-        self.camera_offset_y = 0
-        self.camera_zoom = 1
 
     def __getitem__(self, index):
         """Returns the game objects at a location.
@@ -30,7 +27,7 @@ class Renderer:
         :type: Vector2D
         """
         index_x = index.x * self.tile_width
-        index_y = index.y * self.tile_width + self.camera_offset_y
+        index_y = index.y * self.tile_width
         objects = []
         for game_object in self.game_objects:
             if game_object.x == index_x and game_object.y == index_y:
@@ -46,16 +43,6 @@ class Renderer:
                            y=index.y * self.tile_height)
         game_object.group = self.group_list[index.z]
         self.game_objects.append(game_object)
-
-    def scale(self, factor):
-        """ Scales objects.
-
-        Scales all objects by a factor specified.
-
-        :type: float
-        """
-        for game_object in self.game_objects:
-            game_object.scale = factor
 
     @property
     def batch(self):
