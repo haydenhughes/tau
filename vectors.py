@@ -1,6 +1,5 @@
 class Vector3D:
-    """
-    An object for storing a point on a 3D plane
+    """An object for storing a point on a 3D plane.
 
     :Parameters:
         x : int
