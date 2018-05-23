@@ -44,7 +44,7 @@ class Renderer:
         """
         game_object.update(x=index.x * self.tile_width,
                            y=index.y * self.tile_height)
-
+        game_object.group = self.group_list[index.z]
         self.game_objects.append(game_object)
 
     def scale(self, factor):
