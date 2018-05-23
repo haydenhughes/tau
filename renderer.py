@@ -31,11 +31,11 @@ class Renderer:
         """
         index_x = index.x * self.tile_width
         index_y = index.y * self.tile_width + self.camera_offset_y
-        list = []
+        objects = []
         for game_object in self.game_objects:
             if game_object.x == index_x and game_object.y == index_y:
-                list.append(game_object)
-        return list
+                objects.append(game_object)
+        return objects
 
     def __setitem__(self, index, game_object):
         """Sets a game object at a location.
