@@ -4,8 +4,6 @@ import pyglet
 class Renderer:
     """A tile based object renderer using pyglet.
 
-    The camera_ variables aremodified by a Camera object to modify the view.
-
     :Parameters:
         `layers` : int
             The amount of layers in the z direction which objects can be
@@ -33,22 +31,31 @@ class Renderer:
         """
         index_x = index.x * self.tile_width
         index_y = index.y * self.tile_width + self.camera_offset_y
-        list = []
+        objects = []
         for game_object in self.game_objects:
             if game_object.x == index_x and game_object.y == index_y:
-                list.append(game_object)
-        return list
+                objects.append(game_object)
+        return objects
 
     def __setitem__(self, index, game_object):
         """Sets a game object at a location.
 
         :type: Vector3D
         """
-        game_object.update(x=index.x * self.tile_width + self.camera_offset_x,
-                           y=index.y * self.tile_height + self.camera_offset_y,
-                           scale=self.camera_zoom)
+        game_object.update(x=index.x * self.tile_width,
+                           y=index.y * self.tile_height)
         game_object.group = self.group_list[index.z]
         self.game_objects.append(game_object)
+
+    def scale(self, factor):
+        """ Scales objects.
+
+        Scales all objects by a factor specified.
+
+        :type: float
+        """
+        for game_object in self.game_objects:
+            game_object.scale = factor
 
     @property
     def batch(self):
@@ -59,4 +66,5 @@ class Renderer:
         batch = pyglet.graphics.Batch()
         for game_object in self.game_objects:
             game_object.batch = batch
+
         return batch
