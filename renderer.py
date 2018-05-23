@@ -22,7 +22,7 @@ class Renderer:
             x) for x in range(layers + 1)]
         self.camera_offset_x = 0
         self.camera_offset_y = 0
-        self.camera_zoom = 0
+        self.camera_zoom = 1
 
     def __getitem__(self, index):
         """Returns the game objects at a location.
