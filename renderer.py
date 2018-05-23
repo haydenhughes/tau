@@ -2,8 +2,7 @@ import pyglet
 
 
 class Renderer:
-    """
-    A tile based object renderer using pyglet.
+    """A tile based object renderer using pyglet.
 
     :Parameters:
         `layers` : int
@@ -28,7 +27,7 @@ class Renderer:
         :type: Vector2D
         """
         index_x = index.x * self.tile_width
-        index_y = index.y * self.tile_width
+        index_y = index.y * self.tile_width + self.camera_offset_y
         list = []
         for game_object in self.game_objects:
             if game_object.x == index_x and game_object.y == index_y:
@@ -40,10 +39,19 @@ class Renderer:
 
         :type: Vector3D
         """
-        game_object.position = (index.x * self.tile_width,
-                                index.y * self.tile_height)
-        game_object.group = self.group_list[index.z]
+        game_object.update(x=index.x * self.tile_width,
+                           y=index.y * self.tile_height)
         self.game_objects.append(game_object)
+
+    def scale(self, factor):
+        """ Scales objects.
+
+        Scales all objects by a factor specified.
+
+        :type: float
+        """
+        for game_object in self.game_objects:
+            game_object.scale = factor
 
     @property
     def batch(self):
@@ -54,4 +62,5 @@ class Renderer:
         batch = pyglet.graphics.Batch()
         for game_object in self.game_objects:
             game_object.batch = batch
+
         return batch
