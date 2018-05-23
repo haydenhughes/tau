@@ -29,7 +29,7 @@ class Camera:
         self._zoom = value
         for renderer in self.renderer:
             for game_object in renderer.game_objects:
-                game_object.scale += value
+                game_object.scale = value
 
     def update(self):
         """Updates the camera position."""
