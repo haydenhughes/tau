@@ -4,28 +4,24 @@ import pyglet
 class Renderer:
     """A tile based object renderer using pyglet.
 
-    :Parameters:
-        `layers` : int
-            The amount of layers in the z direction which objects can be
-            placed on.
-        `tile_width` : int
-            The width of a tile in pixels.
-        `tile_height` : int
-            The height of a tile in pixels.
+    Attributes:
+        layers: An integer of the amount of layers used by the renderer.
+        tile_width: An integer of the width of a tile in pixels.
+        tile_height: An integer of the height of a tile in pixels.
+        game_objects: An array of every object managed by the renderer.
+        group_list: An array of OrderedGroup objects for layers.
+        batch: A pyglet.graphics.Batch of all the objects in group_list. Read Only.
     """
 
     def __init__(self, layers=1, tile_width=1, tile_height=1):
         self.tile_width = tile_width
         self.tile_height = tile_height
+        self.layers = layers
         self.game_objects = []
         self.group_list = [pyglet.graphics.OrderedGroup(
-            x) for x in range(layers + 1)]
+            x) for x in range(self.layers + 1)]
 
     def __getitem__(self, index):
-        """Returns the game objects at a location.
-
-        :type: Vector3D
-        """
         index_x = index.x * self.tile_width
         index_y = index.y * self.tile_width
         objects = []
@@ -35,10 +31,6 @@ class Renderer:
         return objects[index.z]
 
     def __setitem__(self, index, game_object):
-        """Sets a game object at a location.
-
-        :type: Vector3D
-        """
         game_object.update(x=index.x * self.tile_width,
                            y=index.y * self.tile_height)
         game_object.group = self.group_list[index.z]
@@ -46,10 +38,6 @@ class Renderer:
 
     @property
     def batch(self):
-        """The batch of objects handled by the renderer. Read Only.
-
-        :type: pyglet.graphics.Batch
-        """
         batch = pyglet.graphics.Batch()
         for game_object in self.game_objects:
             game_object.batch = batch

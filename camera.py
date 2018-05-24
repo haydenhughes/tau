@@ -4,24 +4,24 @@ import pyglet
 class Camera:
     """Creates a moveable, fixed resolution viewport.
 
-    :Properties:
-        `window` : pyglet.Window()
-            A pyglet window object.
-        `width` : int
-            Width of the viewport in pixels.
-        `height` : int
-            Height of the viewport in pixels.
-        `filtered` : boolean
-            Toggle bilinear filtering for up scaled images. Useful for pixel
-            art.
+    Should be used with a context manager with the on_draw code inside.
+
+    Attributes:
+        window: A pyglet window object.
+        width: A integer for the resolution of the camera width in pixels.
+        height: A integer for the resolution of the camera height in pixels.
+        filtered:  A boolean that enables bilinear filtering for up scaled
+                   images. Should be disabled for pixel art.
+        x: An integer for the location of the camera along the x axis.
+        y: An integer for the location of the camera along the y axis.
     """
 
     def __init__(self, window, width=320, height=200, filtered=False):
         self.window = window
         self.width = width
         self.height = height
-        self._x = 0
-        self._y = 0
+        self.x = 0
+        self.y = 0
         self.texture = pyglet.image.Texture.create(width, height,
                                                    rectangle=True)
 
@@ -78,31 +78,7 @@ class Camera:
         pyglet.gl.glOrtho(0, self.window.width, 0, self.window.height, -1, 1)
         pyglet.gl.glMatrixMode(pyglet.gl.GL_MODELVIEW)
 
-    @property
-    def x(self):
-        """x postition of the Camera.
-
-        :type: int
-        """
-        return self._x
-
-    @x.setter
-    def x(self, value):
-        self._x = value
-
-    @property
-    def y(self):
-        """y postition of the Camera.
-
-        :type: int
-        """
-        return self._y
-
-    @y.setter
-    def y(self, value):
-        self._y = value
-
     def update(self):
         """Updates the camera position."""
         pyglet.gl.glLoadIdentity()
-        pyglet.gl.glTranslatef(int(-self._x), int(-self._y), int(-0))
+        pyglet.gl.glTranslatef(int(-self.x), int(-self.y), int(-0))
