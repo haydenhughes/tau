@@ -76,10 +76,10 @@ class RigidBody(pyglet.sprite.Sprite):
         self.x += self.velocity.x
         self.y += self.velocity.y
 
-        for object in self.renderer.game_objects:
-            if isinstance(object, RigidBody) and not object.visible:
-                if self.distance(object) < (self.width/2 + object.width/2):
-                    self.velocity = self.calculate_collision(object)
+        for other in self.renderer.game_objects:
+            if isinstance(other, RigidBody) and not other.visible:
+                if self.distance(other) < (self.width/2 + other.width/2):
+                    self.velocity = self.calculate_collision(other)
 
     def distance(self, other):
         """Calculate distance between self and another object.
