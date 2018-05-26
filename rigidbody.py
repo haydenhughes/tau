@@ -153,7 +153,8 @@ class RigidBody(pyglet.sprite.Sprite):
                         self.velocity = self.elastic_collision(other)
                     else:
                         self.velocity = self.inelastic_collision(other)
-                        self.no_collide.append(other)
+
+                    self.no_collide.append(other)
 
     def distance(self, other):
         """Calculate distance between self and another object.
@@ -190,7 +191,7 @@ class RigidBody(pyglet.sprite.Sprite):
 
         tangential = unit_tangent_vector.dot_product(self._current_velocity)
         normal = (scaler * (self.mass - other.mass) + 2
-                  * other.mass * v2_scaler) / self.mass + other.mass
+                  * other.mass * v2_scaler) / (self.mass + other.mass)
         tangential_vector = unit_tangent_vector * tangential
         normal_vector = unit_vector * normal
 
@@ -208,9 +209,9 @@ class RigidBody(pyglet.sprite.Sprite):
             A Vector of how self should react to the collision.
         """
         x = (self.mass * self._current_velocity.x + other.mass
-             * other._current_velocity.x) / self.mass + other.mass
+             * other._current_velocity.x) / (self.mass + other.mass)
         y = (self.mass * self._current_velocity.y + other.mass
-             * other._current_velocity.y) / self.mass + other.mass
+             * other._current_velocity.y) / (self.mass + other.mass)
 
         final_vector = Vector()
         final_vector.cartesian(x=x, y=y)
