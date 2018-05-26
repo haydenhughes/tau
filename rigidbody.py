@@ -228,8 +228,8 @@ class RigidBodyController:
 
     def rigid_bodies(self):
         """A generator that return all rigid bodies handled by the renderer."""
-        for object in self.renderer.game_objects:
-            if isinstance(object, RigidBody):
+        for game_object in self.renderer.game_objects:
+            if isinstance(game_object, RigidBody):
                 yield object
 
     def update(self):
