@@ -37,8 +37,8 @@ class Vector:
         """
         self.magnitude = magnitude
         self.direction = direction
-        self.x = magnitude * math.degrees(math.cos(math.radians(direction)))
-        self.y = magnitude * math.degrees(math.sin(math.radians(direction)))
+        self.x = magnitude * math.cos(math.radians(direction))
+        self.y = magnitude * math.sin(math.radians(direction))
 
     def cartesian(self, x=0, y=0):
         """Update the values of a vector using the cartesian coordinate system.
@@ -56,20 +56,6 @@ class Vector:
         final_vector = Vector()
         x = self.x + other.x
         y = self.y + other.y
-        final_vector.cartesian(x=x, y=y)
-        return final_vector
-
-    def __sub__(self, other):
-        final_vector = Vector()
-        x = self.x - other.x
-        y = self.x - other.x
-        final_vector.cartesian(x=x, y=y)
-        return final_vector
-
-    def __rsub__(self, other):
-        final_vector = Vector()
-        x = other.x - self.x
-        y = other.x - self.x
         final_vector.cartesian(x=x, y=y)
         return final_vector
 
@@ -103,4 +89,4 @@ class Vector:
         """
         return self.magnitude \
             * other.magnitude \
-            * math.degrees(math.cos(math.radians(self.angle(other))))
+            * math.cos(math.radians(self.angle(other)))
