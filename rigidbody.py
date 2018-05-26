@@ -154,8 +154,6 @@ class RigidBody(pyglet.sprite.Sprite):
                     else:
                         self.velocity = self.inelastic_collision(other)
 
-                    self.no_collide.append(other)
-
     def distance(self, other):
         """Calculate distance between self and another object.
 
@@ -216,3 +214,30 @@ class RigidBody(pyglet.sprite.Sprite):
         final_vector = Vector()
         final_vector.cartesian(x=x, y=y)
         return final_vector
+
+
+class RigidBodyController:
+    """A class for handling the collision checking and moving of rigid bodies.
+
+    Attribues:
+        `renderer`: The renderer object that handles the rigid bodies
+    """
+
+    def __init__(self, renderer=None):
+        self.renderer = renderer
+
+    def rigid_bodies(self):
+        """A generator that return all rigid bodies handled by the renderer."""
+        for object in self.renderer.game_objects:
+            if isinstance(object, RigidBody):
+                yield object
+
+    def update(self):
+        """Update the rigid bodies. Should be called in and update method."""
+        rigid_bodies = list(self.rigid_bodies())
+        # check_collisions must be ran for every object before running move.
+        for rb in rigid_bodies:
+            rb.check_collisions()
+
+        for rb in rigid_bodies:
+            rb.move()
