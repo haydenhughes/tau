@@ -74,6 +74,17 @@ class Vector:
         """
         return math.degrees(math.atan2(other.y, other.x) - math.atan2(self.y, self.x))
 
+    def dot_product(self, other):
+        """Get the dot product of two vectors.
+
+        Args:
+            other: Another vector.
+
+        Returns:
+            A float of the resulting scaler.
+        """
+        return self.magnitude * other.magnitude * math.degrees(math.cos(math.radians(self.angle(other))))
+
 
 class RigidBody(pyglet.sprite.Sprite):
     """A sprite that obeys physics.
@@ -116,7 +127,7 @@ class RigidBody(pyglet.sprite.Sprite):
         Returns:
             A float of the calculated distance in pixels.
         """
-        return math.sqrt((other.y - self.y) ** 2 + (other.x - self.x) ** 2)
+        return math.hypot(other.x - self.x, other.y - self.y)
 
     def calculate_collision(self, other):
         """Calculate the resault vectors of a collision.
@@ -127,23 +138,22 @@ class RigidBody(pyglet.sprite.Sprite):
         Returns:
             A Vector of how self should react to the collision.
         """
-        angle = self.velocity.angle(other)
-        f = (self.velocity.magnitude
-             * math.degrees(math.cos(self.velocity.direction - angle))
-             * (self.mass - other.mass) + 2
-             * other.mass
-             * other.velocity.magnitude
-             * math.degrees(math.cos(other.velocity.angle - angle))) \
-            / (self.mass + other.mass)
+        normal_vector = Vector()
+        unit_vector = Vector()
+        unit_tangent_vector = Vector()
+        normal_vector.cartesian(x=other.x - self.x, y=other.y - self.y)
+        unit_vector.cartesian(x=normal_vector.x / normal_vector.magnitude,
+                              y=normal_vector.y / normal_vector.magnitude)
+        unit_tangent_vector.cartesian(-unit_vector.y, unit_vector.x)
 
-        x = f * math.degrees(math.cos(angle)) \
-            - self.velocity.magnitude \
-            * math.degrees(math.sin(self.velocity.angle - angle)) \
-            * math.degrees(math.sin(angle))
+        scaler = unit_vector.dot_product(self.velocity)
+        v2_scaler = unit_vector.dot_product(other._current_velocity)
 
-        y = f * math.degrees(math.sin(angle))  \
-            + self.velocity.magnitude  \
-            * math.degrees(math.sin(self.velocity.angle - angle)) \
-            * math.degrees(math.cos(angle))
+        tangential = unit_tangent_vector.dot_product(self.velocity)
+        normal = (scaler * (self.mass - other.mass) + 2 * other.mass * v2_scaler) / self.mass + other.mass
+        tangential_vector = unit_tangent_vector * tangential
+        normal_vector = unit_vector * normal
 
-        return Vector(math.degrees(math.atan(y/x)), math.sqrt(x ** 2 + y ** 2))
+        out_vector = tangential_vector + normal_vector
+
+        return out_vector
