@@ -120,12 +120,17 @@ class RigidBody(pyglet.sprite.Sprite):
         renderer: A renderer object of which is used to check collisions
                   with objects managed by that renderer.
         velocity: A vector of the velocity of the object.
+        elastic: A boolean of wheather or not the
+                 object is elastic (like a ball).
+        no_collide: A list of object that the RigidBody cannot collide with.
     """
 
-    def __init__(self, image, mass=1, renderer=None):
+    def __init__(self, image, mass=1, renderer=None, elastic=False):
         super().__init__(image)
         self.mass = mass
         self.renderer = renderer
+        self.elastic = elastic
+        self.no_collide = []
         self.velocity = Vector()
         self._current_velocity = Vector()
         self._current_velocity.polar(0, 0)
@@ -142,9 +147,13 @@ class RigidBody(pyglet.sprite.Sprite):
         This MUST be ran before running any object.move() functions.
         """
         for other in self.renderer.game_objects:
-            if id(self) != id(other):
+            if id(self) != id(other) and other not in self.no_collide:
                 if 0 < self.distance(other) <= self.width:
-                    self.velocity = self.calculate_collision(other)
+                    if self.elastic:
+                        self.velocity = self.elastic_collision(other)
+                    else:
+                        self.velocity = self.inelastic_collision(other)
+                        self.no_collide.append(other)
 
     def distance(self, other):
         """Calculate distance between self and another object.
@@ -157,8 +166,10 @@ class RigidBody(pyglet.sprite.Sprite):
         """
         return math.hypot(other.x - self.x, other.y - self.y)
 
-    def calculate_collision(self, other):
-        """Calculate the resault vectors of a collision.
+    def elastic_collision(self, other):
+        """Calculate the result vectors of a elastic collision.
+
+        The mathmatical equation assumes that the object is a circle.
 
         Args:
             other: Another RidgidBody.
@@ -174,10 +185,10 @@ class RigidBody(pyglet.sprite.Sprite):
                               y=normal_vector.y / normal_vector.magnitude)
         unit_tangent_vector.cartesian(-unit_vector.y, unit_vector.x)
 
-        scaler = unit_vector.dot_product(self.velocity)
+        scaler = unit_vector.dot_product(self._current_velocity)
         v2_scaler = unit_vector.dot_product(other._current_velocity)
 
-        tangential = unit_tangent_vector.dot_product(self.velocity)
+        tangential = unit_tangent_vector.dot_product(self._current_velocity)
         normal = (scaler * (self.mass - other.mass) + 2
                   * other.mass * v2_scaler) / self.mass + other.mass
         tangential_vector = unit_tangent_vector * tangential
@@ -186,3 +197,21 @@ class RigidBody(pyglet.sprite.Sprite):
         out_vector = tangential_vector + normal_vector
 
         return out_vector
+
+    def inelastic_collision(self, other):
+        """Calculate the result vectors of a inelastic collision.
+
+        Args:
+            other: Another RidgidBody.
+
+        Returns:
+            A Vector of how self should react to the collision.
+        """
+        x = (self.mass * self._current_velocity.x + other.mass
+             * other._current_velocity.x) / self.mass + other.mass
+        y = (self.mass * self._current_velocity.y + other.mass
+             * other._current_velocity.y) / self.mass + other.mass
+
+        final_vector = Vector()
+        final_vector.cartesian(x=x, y=y)
+        return final_vector
