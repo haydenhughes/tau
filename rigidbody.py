@@ -7,8 +7,14 @@ class Vector:
 
     The x and y attributes are not position and are only there to assist
     with vector math.
-    Supports vector addition and subtraction using the +  and - operator.
-    Example: `vec3 = vec1 + vec2` or `vec3 = vec1 - vec2`
+    Supports vector math standard operators.
+    Example: `vec3 = vec1 + vec2`
+
+    A vector's attibutes should not be editied directly but instead updated
+    using the polar() and cartesian() functions.
+    Vectors are created with its values as 0 so after creation the vector must
+    be given values using the polar() and cartesian() methods.
+
 
     Attributes:
         direction: A float of the direction in degrees of the vector.
@@ -24,12 +30,24 @@ class Vector:
         self.y = 0
 
     def polar(self, magnitude=0, direction=0):
+        """Update the values of a vector using the polar coordinate system.
+
+        Args:
+            magnitude: A float for magnitude of the vector.
+            direction: A float for direction of the vector in degrees.
+        """
         self.magnitude = magnitude
         self.direction = direction
         self.x = magnitude * math.degrees(math.cos(math.radians(direction)))
         self.y = magnitude * math.degrees(math.sin(math.radians(direction)))
 
     def cartesian(self, x=0, y=0):
+        """Update the values of a vector using the cartesian coordinate system.
+
+        Args:
+            x: A float for the x coordinate of the vector.
+            y: A float for the y coordinate of the vector.
+        """
         self.x = x
         self.y = y
         self.magnitude = math.hypot(x, y)
@@ -72,7 +90,8 @@ class Vector:
         Returns:
             A float in degrees of the angle between self and other vectors.
         """
-        return math.degrees(math.atan2(other.y, other.x) - math.atan2(self.y, self.x))
+        return math.degrees(math.atan2(other.y, other.x)
+                            - math.atan2(self.y, self.x))
 
     def dot_product(self, other):
         """Get the dot product of two vectors.
@@ -83,7 +102,9 @@ class Vector:
         Returns:
             A float of the resulting scaler.
         """
-        return self.magnitude * other.magnitude * math.degrees(math.cos(math.radians(self.angle(other))))
+        return self.magnitude \
+            * other.magnitude \
+            * math.degrees(math.cos(math.radians(self.angle(other))))
 
 
 class RigidBody(pyglet.sprite.Sprite):
@@ -98,7 +119,7 @@ class RigidBody(pyglet.sprite.Sprite):
         mass: A float of the mass of the object in kg. (Default: 1)
         renderer: A renderer object of which is used to check collisions
                   with objects managed by that renderer.
-        velocity: A vector of the velocity of the object. (Default: `Vector(0,0)`)
+        velocity: A vector of the velocity of the object.
     """
 
     def __init__(self, image, mass=1, renderer=None):
@@ -111,11 +132,15 @@ class RigidBody(pyglet.sprite.Sprite):
         self.velocity.polar(0, 0)
 
     def move(self):
+        """Apply the velocity transformations."""
         self._current_velocity = self.velocity
         self.x += self.velocity.x
         self.y += self.velocity.y
 
     def check_collisions(self):
+        """Check for collisions with other objects.
+        This MUST be ran before running any object.move() functions.
+        """
         for other in self.renderer.game_objects:
             if id(self) != id(other):
                 if 0 < self.distance(other) <= self.width:
@@ -153,7 +178,8 @@ class RigidBody(pyglet.sprite.Sprite):
         v2_scaler = unit_vector.dot_product(other._current_velocity)
 
         tangential = unit_tangent_vector.dot_product(self.velocity)
-        normal = (scaler * (self.mass - other.mass) + 2 * other.mass * v2_scaler) / self.mass + other.mass
+        normal = (scaler * (self.mass - other.mass) + 2
+                  * other.mass * v2_scaler) / self.mass + other.mass
         tangential_vector = unit_tangent_vector * tangential
         normal_vector = unit_vector * normal
 
