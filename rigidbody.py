@@ -3,7 +3,7 @@ import math
 
 
 class Vector:
-    """A class for handling polar coordinate vectors.
+    """A class for handling vectors.
 
     The x and y attributes are not position and are only there to assist
     with vector math.
@@ -17,25 +17,51 @@ class Vector:
         y: A float of the vector's cartesian y coordinate.
     """
 
-    def __init__(self, direction, magnitude):
-        self.direction = direction
+    def __init__(self):
+        self.magnitude = 0
+        self.direction = 0
+        self.x = 0
+        self.y = 0
+
+    def polar(self, magnitude=0, direction=0):
         self.magnitude = magnitude
-        self.x = self.magnitude * math.cos(math.radians(self.direction))
-        self.y = self.magnitude * math.sin(math.radians(self.direction))
+        self.direction = direction
+        self.x = magnitude * math.degrees(math.cos(math.radians(direction)))
+        self.y = magnitude * math.degrees(math.sin(math.radians(direction)))
+
+    def cartesian(self, x=0, y=0):
+        self.x = x
+        self.y = y
+        self.magnitude = math.hypot(x, y)
+        self.direction = math.degrees(math.atan2(y, x))
 
     def __add__(self, other):
+        final_vector = Vector()
         x = self.x + other.x
-        y = self.x + other.x
-        direction = math.degrees(math.atan(x / y))
-        magnitude = math.sqrt(x ** 2 + y ** 2)
-        return Vector(direction, magnitude)
+        y = self.y + other.y
+        final_vector.cartesian(x=x, y=y)
+        return final_vector
 
     def __sub__(self, other):
+        final_vector = Vector()
         x = self.x - other.x
         y = self.x - other.x
-        direction = math.degrees(math.atan(x / y))
-        magnitude = math.sqrt(x ** 2 + y ** 2)
-        return Vector(direction, magnitude)
+        final_vector.cartesian(x=x, y=y)
+        return final_vector
+
+    def __rsub__(self, other):
+        final_vector = Vector()
+        x = other.x - self.x
+        y = other.x - self.x
+        final_vector.cartesian(x=x, y=y)
+        return final_vector
+
+    def __mul__(self, scaler):
+        final_vector = Vector()
+        x = self.x * scaler
+        y = self.y * scaler
+        final_vector.cartesian(x=x, y=y)
+        return final_vector
 
     def angle(self, other):
         """Get the angle between two vectors.
