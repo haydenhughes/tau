@@ -105,17 +105,20 @@ class RigidBody(pyglet.sprite.Sprite):
         super().__init__(image)
         self.mass = mass
         self.renderer = renderer
-        self.velocity = Vector(0, 0)
+        self.velocity = Vector()
+        self._current_velocity = Vector()
+        self._current_velocity.polar(0, 0)
+        self.velocity.polar(0, 0)
 
-    def update(self):
-        """Checks collisions and applies velocity."""
-
+    def move(self):
+        self._current_velocity = self.velocity
         self.x += self.velocity.x
         self.y += self.velocity.y
 
+    def check_collisions(self):
         for other in self.renderer.game_objects:
-            if isinstance(other, RigidBody) and not other.visible:
-                if self.distance(other) < (self.width/2 + other.width/2):
+            if id(self) != id(other):
+                if 0 < self.distance(other) <= self.width:
                     self.velocity = self.calculate_collision(other)
 
     def distance(self, other):
