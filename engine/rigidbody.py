@@ -44,7 +44,7 @@ class RigidBody(pyglet.sprite.Sprite):
         """
         for other in self.renderer.game_objects:
             if id(self) != id(other) and other not in self.no_collide:
-                if 0 < self.distance(other) <= self.width:
+                if 0 < self.distance(other) <= self.width or 0 < self.distance(other) <= self.height:
                     if self.elastic:
                         self.velocity = self.elastic_collision(other)
                     else:
