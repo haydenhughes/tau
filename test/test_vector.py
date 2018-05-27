@@ -6,7 +6,6 @@ class TestVector(unittest.TestCase):
     def setUp(self):
         self.vec1 = Vector()
         self.vec2 = Vector()
-        self.vec3 = Vector()
 
     def test_polar(self):
         self.vec1.cartesian(x=5, y=-12)
