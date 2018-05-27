@@ -44,7 +44,7 @@ class RigidBody(pyglet.sprite.Sprite):
         """
         for other in self.renderer.game_objects:
             if id(self) != id(other) and other not in self.no_collide:
-                if 0 < self.distance(other) <= self.width or 0 < self.distance(other) <= self.height:
+                if 0 <= self.distance(other) <= self.width or 0 < self.distance(other) <= self.height:
                     if self.elastic:
                         self.velocity = self.elastic_collision(other)
                     else:
@@ -75,7 +75,8 @@ class RigidBody(pyglet.sprite.Sprite):
         normal_vector = Vector()
         unit_vector = Vector()
         unit_tangent_vector = Vector()
-        normal_vector.cartesian(x=other.x - self.x, y=other.y - self.y)
+        normal_vector.cartesian(x=(other.x + other.width/2) - (self.x + self.width/2),
+                                y=(other.y + other.height/2) - (self.y + self.height/2))
         unit_vector.cartesian(x=normal_vector.x / normal_vector.magnitude,
                               y=normal_vector.y / normal_vector.magnitude)
         unit_tangent_vector.cartesian(-unit_vector.y, unit_vector.x)
