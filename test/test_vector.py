@@ -1,5 +1,5 @@
 import unittest
-from engine import Vector
+from engine.vector import Vector
 
 
 class TestVector(unittest.TestCase):
