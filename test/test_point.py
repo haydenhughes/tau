@@ -1,5 +1,5 @@
 import unittest
-from engine import Point
+from engine.point import Point
 
 
 class TestPoint(unittest.TestCase):
