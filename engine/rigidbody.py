@@ -1,7 +1,5 @@
 import pyglet
-import math
 from engine.vector import Vector
-from engine.point import Point
 
 
 class RigidBody(pyglet.sprite.Sprite):
@@ -36,8 +34,12 @@ class RigidBody(pyglet.sprite.Sprite):
     def move(self):
         """Apply the velocity transformations."""
         self._current_velocity = self.velocity
-        self.x += self.velocity.x
-        self.y += self.velocity.y
+        try:
+            self.x += self.velocity.x
+            self.y += self.velocity.y
+        except AttributeError:
+            raise TypeError(
+                'Velocity must be a vector.')
 
     def check_collisions(self):
         """Check for collisions with other objects.
@@ -49,7 +51,6 @@ class RigidBody(pyglet.sprite.Sprite):
                         and self.x + self.width > other.x \
                         and self.y < other.y + other.height \
                         and self.height + self.y > other.y:
-
                     if self.elastic:
                         self.velocity = self.elastic_collision(other)
                     else:
