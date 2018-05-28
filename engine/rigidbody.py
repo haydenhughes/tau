@@ -1,6 +1,7 @@
 import pyglet
 import math
 from engine.vector import Vector
+from engine.point import Point
 
 
 class RigidBody(pyglet.sprite.Sprite):
@@ -44,22 +45,15 @@ class RigidBody(pyglet.sprite.Sprite):
         """
         for other in self.renderer.game_objects:
             if id(self) != id(other) and other not in self.no_collide:
-                if 0 <= self.distance(other) <= self.width or 0 < self.distance(other) <= self.height:
+                if self.x < other.x + other.width \
+                        and self.x + self.width > other.x \
+                        and self.y < other.y + other.height \
+                        and self.height + self.y > other.y:
+
                     if self.elastic:
                         self.velocity = self.elastic_collision(other)
                     else:
                         self.velocity = self.inelastic_collision(other)
-
-    def distance(self, other):
-        """Calculate distance between self and another object.
-
-        Args:
-            other: Another sprite.
-
-        Returns:
-            A float of the calculated distance in pixels.
-        """
-        return math.hypot(other.x - self.x, other.y - self.y)
 
     def elastic_collision(self, other):
         """Calculate the result vectors of a elastic collision.
