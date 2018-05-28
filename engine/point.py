@@ -15,18 +15,6 @@ class Point:
         self.y = y
         self.z = z
 
-    def angle(self, other):
-        """Get the angle between two points in 2D.
-
-        Args:
-            other: Another point.
-
-        Returns:
-            A float in degrees of the angle between self and other points.
-        """
-        return math.degrees(math.atan2(other.y, other.x)
-                            - math.atan2(self.y, self.x))
-
     def distance(self, other):
         """Calculate distance between self and another object.
 
