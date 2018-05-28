@@ -22,14 +22,14 @@ class Camera:
         self.height = height
         self.x = 0
         self.y = 0
-        self.texture = pyglet.image.Texture.create(width, height,
+        self._texture = pyglet.image.Texture.create(width, height,
                                                    rectangle=True)
 
         if not filtered:
-            pyglet.gl.glTexParameteri(self.texture.target,
+            pyglet.gl.glTexParameteri(self._texture.target,
                                       pyglet.gl.GL_TEXTURE_MAG_FILTER,
                                       pyglet.gl.GL_NEAREST)
-            pyglet.gl.glTexParameteri(self.texture.target,
+            pyglet.gl.glTexParameteri(self._texture.target,
                                       pyglet.gl.GL_TEXTURE_MIN_FILTER,
                                       pyglet.gl.GL_NEAREST)
 
@@ -40,7 +40,7 @@ class Camera:
 
     def __exit__(self, *args):
         buffer = pyglet.image.get_buffer_manager().get_color_buffer()
-        self.texture.blit_into(buffer, 0, 0, 0)
+        self._texture.blit_into(buffer, 0, 0, 0)
 
         pyglet.gl.glViewport(0, 0, self.window.width, self.window.height)
         self.set_window_projection()
@@ -60,7 +60,7 @@ class Camera:
         pyglet.gl.glClear(pyglet.gl.GL_COLOR_BUFFER_BIT)
         pyglet.gl.glLoadIdentity()
         pyglet.gl.glColor3f(1, 1, 1)
-        self.texture.blit(x, y, width=scale_width, height=scale_height)
+        self._texture.blit(x, y, width=scale_width, height=scale_height)
 
     def set_fixed_projection(self):
         # Override this method if you need to change the projection of the
