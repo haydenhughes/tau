@@ -24,11 +24,10 @@ class Renderer:
     def __getitem__(self, index):
         index_x = index.x * self.tile_width
         index_y = index.y * self.tile_width
-        objects = []
-        for game_object in self.game_objects:
-            if game_object.x == index_x and game_object.y == index_y:
-                objects.append(game_object)
-        return objects[index.z]
+        objects = [obj for obj in self.game_objects if obj.x
+                   == index_x and obj.y == index_y and obj.group
+                   == self.group_list[index.z]]
+        return objects
 
     def __setitem__(self, index, game_object):
         game_object.update(x=index.x * self.tile_width,

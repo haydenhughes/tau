@@ -1,2 +1,1 @@
-numpy
-pyglet
+pyglet==1.3.2
