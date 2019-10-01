@@ -1,10 +1,13 @@
 from tau import Tau, PointMass, Vector
+from tau.objects import Planet
 
 app = Tau(resizable=True)
 
-vel = Vector()
+vel = Vector(1, -1)
 
-mass1 = PointMass(app, 10, 100, velocity=vel)
-mass2 = PointMass(app, 10, 200, velocity=vel)
+mass1 = Planet(300, 300, mass=20e10)
+mass2 = PointMass(100, 400, velocity=vel, mass=1)
+
+app.add_objects(mass1, mass2)
 
 app.run()

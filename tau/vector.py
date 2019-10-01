@@ -38,6 +38,9 @@ class Vector(object):
     def __mul__(self, scaler: float):
         return Vector(self.x * scaler, self.y * scaler)
 
+    def __repr__(self):
+        return f'x: {self.x}, y: {self.y}'
+
     def angle(self, other: 'Vector'):
         """Get the angle between two vectors.
 
