@@ -19,14 +19,16 @@ class Tau(pyglet.window.Window):
     def __len__(self):
         return len(self._objects)
 
-    def __getitems__(self, index):
+    def __getitem__(self, index):
         if index < len(self):
             return self._objects[index]
         raise IndexError('Object out of range')
 
     def run(self):
+        """Start simulation"""
         for object in self._objects:
             self.push_handlers(object)
+            object.app = self
             pyglet.clock.schedule_interval(object.update, self.framerate)
 
         pyglet.app.run()
