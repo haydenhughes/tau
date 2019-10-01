@@ -2,7 +2,7 @@ import pyglet
 from tau.vector import Vector
 
 
-class Rigidbody(object):
+class PointMass(object):
     def __init__(self,
                  x: int,
                  y: int,
@@ -15,20 +15,9 @@ class Rigidbody(object):
         self.velocity = velocity
         self.mass = mass
 
-    def move(self):
+    def update(self, dt):
         self.x += self.velocity.x
         self.y += self.velocity.y
-
-    def update(self):
-        self.move()
-
-    def gravitational(self):
-        pass
-
-
-class PointMass(Rigidbody):
-    def update(self, dt):
-        super().update()
 
     def on_draw(self):
         pyglet.graphics.draw(1, pyglet.gl.GL_POINTS,
