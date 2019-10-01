@@ -1,4 +1,5 @@
-# pyglet-game [![CodeFactor](https://www.codefactor.io/repository/github/loser-lagoon-studios/pyglet-game/badge)](https://www.codefactor.io/repository/github/loser-lagoon-studios/pyglet-game) [![Build Status](https://travis-ci.com/loser-lagoon-studios/pyglet-game.svg?branch=staging)](https://travis-ci.com/loser-lagoon-studios/pyglet-game) [![codecov](https://codecov.io/gh/loser-lagoon-studios/pyglet-game/branch/staging/graph/badge.svg)](https://codecov.io/gh/loser-lagoon-studios/pyglet-game)
+# Tau τ
 
+The very hacked together physics engine.
 
-Our game in pylet
+Made for me to better learn kinematics.
