@@ -44,8 +44,18 @@ class PointMass(object):
         self.x += self.velocity.x
         self.y += self.velocity.y
 
+    @property
+    def momentum(self):
+        """A read only Vector of the current momentum of the object."""
+        return self.mass * self.velocity
+
+    @property
+    def kinetic_energy(self):
+        """A read only float of the kinetic energy of the object in Joules."""
+        return 0.5 * self.mass * (self.velocity.magnitude ** 2)
+
     def update(self, dt):
-        """Called every frame flip by Tau
+        """Called every time a second passes in the simulation.
 
         Args:
             dt: The floored (rounded down) amount of whole seconds that has
@@ -55,6 +65,7 @@ class PointMass(object):
         self._move()
 
     def on_draw(self):
+        """Called every frame flip by Tau"""
         pyglet.graphics.draw(1, pyglet.gl.GL_POINTS,
                              ('v2i', (int(self.x), int(self.y))),
                              ('c3B', self.color))
