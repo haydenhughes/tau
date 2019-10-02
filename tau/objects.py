@@ -30,15 +30,15 @@ class PointMass(object):
         self.mass = mass
         self.app = None
 
-    def apply_acceleration(self):
-        self.velocity += self.acceleration
+    def apply_acceleration(self, dt):
+        self.velocity += self.acceleration * dt
 
     def move(self):
         self.x += self.velocity.x
         self.y += self.velocity.y
 
     def update(self, dt):
-        self.apply_acceleration()
+        self.apply_acceleration(dt)
         self.move()
 
     def on_draw(self):
