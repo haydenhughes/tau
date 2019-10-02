@@ -32,17 +32,23 @@ class PointMass(object):
         self.mass = mass
         self.app = None
 
-    def _apply_acceleration(self, dt):
-        # Account for gravity between objects
+    def _move(self):
+        # Apply physics
         for object in self.app:
             if object != self:
-                self.acceleration += (self.gravitational_force(object) / self.mass)
+                if object.x == self.x or object.y == self.y:
+                    self._handle_collisions(object)
 
-        self.velocity += self.acceleration * dt
+                # account for gravity
+                self.apply_force(self.gravitational_force(object))
 
-    def _move(self):
+        self.velocity += self.acceleration
+
         self.x += self.velocity.x
         self.y += self.velocity.y
+
+    def _handle_collisions(self, other):
+        pass
 
     @property
     def momentum(self):
@@ -53,6 +59,14 @@ class PointMass(object):
     def kinetic_energy(self):
         """A read only float of the kinetic energy of the object in Joules."""
         return 0.5 * self.mass * (self.velocity.magnitude ** 2)
+
+    def apply_force(self, force: Vector):
+        """Apply a force to the object
+
+        Args:
+            force: A Vector of the force to apply.
+        """
+        self.acceleration += force / self.mass
 
     def update(self, dt):
         """Called every time a second passes in the simulation.
