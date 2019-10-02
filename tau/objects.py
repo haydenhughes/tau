@@ -31,6 +31,12 @@ class PointMass(object):
         self.app = None
 
     def apply_acceleration(self, dt):
+
+        # Account for gravity between objects
+        for object in self.app:
+            if object != self:
+                self.acceleration += (self.gravitational_force(object) / self.mass)
+
         self.velocity += self.acceleration * dt
 
     def move(self):
@@ -46,25 +52,14 @@ class PointMass(object):
                              ('v2i', (int(self.x), int(self.y))),
                              ('c3B', self.color))
 
-    def distance_to(self, other):
+    def distance_to(self, other: 'PointMass'):
         return math.sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)
 
-    def angle_between(self, other):
-        return math.atan2(self.x - other.x, self.y - other.y)
+    def angle_between(self, other: 'PointMass'):
+        return math.atan2(other.x - self.x, other.y - self.y)
 
-
-class Planet(PointMass):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def gravitational_force(self, other):
+    def gravitational_force(self, other: 'PointMass'):
         gf = (self.GRAVITATIONAL_CONSTANT * self.mass
               * other.mass) / (self.distance_to(other) ** 2)
-        return Vector(gf * math.cos(self.angle_between(other)),
-                      gf * math.sin(self.angle_between(other)))
-
-    def apply_acceleration(self):
-        for object in self.app:
-            if object != self:
-                object.acceleration += self.gravitational_force(object)
-        super().apply_acceleration()
+        return Vector(gf * math.sin(self.angle_between(other)),
+                      gf * math.cos(self.angle_between(other)))
