@@ -14,6 +14,13 @@ class Tau(pyglet.window.Window):
         self._objects = []
 
     def add_objects(self, *object):
+        """Add objects to the simulation.
+
+        This is required to be able to properly track objects.
+
+        Args:
+            object: One or more objects.
+        """
         self._objects.extend(object)
 
     def __len__(self):
