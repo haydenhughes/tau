@@ -4,13 +4,13 @@ import pyglet
 class Tau(pyglet.window.Window):
     """ Helper to set up a window and manage objects.
     Attributes:
-        framerate: A float of the amount of time in seconds each frame is
-            displayed.
+        speed: A float of how long, in seconds, a second is in the simulation.
+            Default: 1/60
     """
 
-    def __init__(self, *args, framerate=1/60, **kwargs):
+    def __init__(self, *args, speed=1/60, **kwargs):
         super().__init__(*args, **kwargs)
-        self.framerate = framerate
+        self.speed = speed
         self._objects = []
 
     def add_objects(self, *object):
@@ -36,6 +36,6 @@ class Tau(pyglet.window.Window):
         for object in self._objects:
             self.push_handlers(object)
             object.app = self
-            pyglet.clock.schedule_interval(object.update, self.framerate)
+            pyglet.clock.schedule_interval(object.update, self.speed)
 
         pyglet.app.run()
