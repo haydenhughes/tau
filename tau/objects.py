@@ -20,7 +20,7 @@ class PointMass(object):
     def __init__(self,
                  x: int,
                  y: int,
-                 mass: float = 0,
+                 mass: float = 1,
                  velocity: Vector = Vector(),
                  acceleration: Vector = Vector(),
                  color=(255, 255, 255)):
@@ -36,10 +36,10 @@ class PointMass(object):
         # Apply physics
         for object in self.app:
             if object != self:
-                if object.x == self.x or object.y == self.y:
+                if self._has_collided(object):
                     self._handle_collisions(object)
 
-                # account for gravity
+                # Apply gravity
                 self.apply_force(self.gravitational_force(object))
 
         self.velocity += self.acceleration
@@ -48,12 +48,33 @@ class PointMass(object):
         self.y += self.velocity.y
 
     def _handle_collisions(self, other):
-        pass
+        self.velocity = other.velocity = (
+            self.momentum + other.momentum) / (self.mass + other.mass)
+
+    def _has_collided(self, other):
+        # Need to account for velocity so it can't 'jump' over the the other object.
+        return (self.x - self.velocity.x <= other.x <= self.x + self.velocity.x
+                and self.y - self.velocity.y <= other.y <= self.y + self.velocity.y)
+
+    def update(self, dt):
+        """Called every time a second passes in the simulation.
+
+        Args:
+            dt: The floored (rounded down) amount of whole seconds that has
+                elasped between frame refreshes. This value is generally 0.
+        """
+        self._move()
+
+    def on_draw(self):
+        """Called every frame flip by Tau"""
+        pyglet.graphics.draw(1, pyglet.gl.GL_POINTS,
+                             ('v2i', (int(self.x), int(self.y))),
+                             ('c3B', self.color))
 
     @property
     def momentum(self):
         """A read only Vector of the current momentum of the object."""
-        return self.mass * self.velocity
+        return self.velocity * self.mass
 
     @property
     def kinetic_energy(self):
@@ -67,22 +88,6 @@ class PointMass(object):
             force: A Vector of the force to apply.
         """
         self.acceleration += force / self.mass
-
-    def update(self, dt):
-        """Called every time a second passes in the simulation.
-
-        Args:
-            dt: The floored (rounded down) amount of whole seconds that has
-                elasped between frame refreshes. This value is generally 0.
-        """
-        self._apply_acceleration(dt)
-        self._move()
-
-    def on_draw(self):
-        """Called every frame flip by Tau"""
-        pyglet.graphics.draw(1, pyglet.gl.GL_POINTS,
-                             ('v2i', (int(self.x), int(self.y))),
-                             ('c3B', self.color))
 
     def distance_to(self, other: 'PointMass'):
         """Calcualate the distance between objects.
