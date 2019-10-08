@@ -4,17 +4,16 @@ The very hacked together physics engine.
 
 Made for me to better learn kinematics.
 
-## ToDo:
- - [] Electron object
- - [] Magnets
-
 ## Basic Usage
 ```python
-from Tau import PointMass, Tau
+from Tau import Tau, PointMass, Vector
 
 app = Tau()
 
-mass = PointMass(400, 300)
+v = Vector(1, 1)
+g = Vector(0, -9.8)
+
+mass = PointMass(400, 300, mass=1, velocity=v, acceleration=g)
 
 app.add_objects(mass)
 app.run()
