@@ -24,11 +24,11 @@
         },
         "pyglet": {
             "hashes": [
-                "sha256:08353c549b7f26d5815cc2e9360a85e4e0d80e6a67962e18df0255b00cb529ab",
-                "sha256:40ed3c10b970b2341e4e0eec208d38f2f50684e68f6d60082e0374c587f37585"
+                "sha256:6cdfbde022999de5598d5f8e1693063ebd9efa59ff3c20d82b033bc4b39fad69",
+                "sha256:6f68af45fd25c4d855da8c2cd92453d1d26885ac7fd8e258be94e7d8e6e78407"
             ],
             "index": "pypi",
-            "version": "==1.4.4"
+            "version": "==1.4.5"
         }
     },
     "develop": {
@@ -159,6 +159,9 @@
             "version": "==0.2.0"
         },
         "python-language-server": {
+            "extras": [
+                "all"
+            ],
             "hashes": [
                 "sha256:bf172c9c21fc5c2baa293155ddcb27712905f1ea1ebc0ba90985f7fd13039550"
             ],
