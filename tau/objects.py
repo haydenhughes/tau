@@ -30,11 +30,11 @@ class PointMass(object):
         self.velocity = velocity
         self.acceleration = acceleration
         self.mass = mass
-        self.app = None
+        self._app = None
 
     def _move(self):
         # Apply physics
-        for object in self.app:
+        for object in self._app:
             if object != self:
                 if self._has_collided(object):
                     self._handle_collisions(object)

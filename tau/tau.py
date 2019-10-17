@@ -35,7 +35,7 @@ class Tau(pyglet.window.Window):
         """Start simulation"""
         for object in self._objects:
             self.push_handlers(object)
-            object.app = self
+            object._app = self
             pyglet.clock.schedule_interval(object.update, self.speed)
 
         pyglet.app.run()
