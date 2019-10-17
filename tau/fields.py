@@ -1,21 +1,16 @@
+import math
+
+
 class Field(object):
-    def __init__(self, x, y, length, width):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.length = length
-        self.width = width
         self._app = None
 
-    def is_object_in_field(self, other):
-        return (self.x < object.x < self.x + self.length) \
-            and (self.y < object.y < self.y + self.width)
+    def radius(self, other):
+        return math.sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)
 
     def update(self):
-        for object in self._app.objects:
-            if self.is_object_in_field(object):
-                self.apply_field()
-
-    def apply_field(self):
         pass
 
 
