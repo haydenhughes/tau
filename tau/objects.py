@@ -34,7 +34,7 @@ class PointMass(object):
 
     def _move(self):
         # Apply physics
-        for object in self._app:
+        for object in self._app.objects:
             if object != self:
                 if self._has_collided(object):
                     self._handle_collisions(object)
