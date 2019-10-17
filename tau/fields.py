@@ -57,11 +57,6 @@ class Field(object):
         return math.atan2(self._x - other.x, self._y - other.y)
 
 
-class MagneticField(Field):
-    def __init__(self):
-        pass
-
-
 class GravitationalField(Field):
     GRAVITATIONAL_CONSTANT = 6.673e-11
 
