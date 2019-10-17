@@ -1,7 +1,4 @@
-import pyglet
-
-
-class Tau(pyglet.window.Window):
+class Tau:
     """ Helper to set up a window and manage objects.
     Attributes:
         speed: A float of how long, in seconds, a second is in the simulation.
@@ -9,7 +6,6 @@ class Tau(pyglet.window.Window):
     """
 
     def __init__(self, *args, speed=1/60, **kwargs):
-        super().__init__(*args, **kwargs)
         self.speed = speed
         self._objects = []
 
@@ -36,6 +32,5 @@ class Tau(pyglet.window.Window):
         for object in self._objects:
             self.push_handlers(object)
             object.app = self
-            pyglet.clock.schedule_interval(object.update, self.speed)
 
-        pyglet.app.run()
+        # TODO: Spin off a thread to run update() methods asynchronously

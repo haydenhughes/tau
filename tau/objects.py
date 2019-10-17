@@ -65,12 +65,6 @@ class PointMass(object):
         """
         self._move()
 
-    def on_draw(self):
-        """Called every frame flip by Tau"""
-        pyglet.graphics.draw(1, pyglet.gl.GL_POINTS,
-                             ('v2i', (int(self.x), int(self.y))),
-                             ('c3B', self.color))
-
     @property
     def momentum(self):
         """A read only Vector of the current momentum of the object."""
