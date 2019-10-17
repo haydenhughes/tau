@@ -7,12 +7,15 @@ class Field(object):
 
     This class serves as no more then a template for building fields.
 
-    Fields attatch to any object where the origin of the field is the position
+    Fields attach to any object. The origin of the field is the position
     of the object.
+
+    Attributes:
+        object: An object to attach the field to
     """
 
     def __init__(self, object):
-        self._object = object
+        self.object = object
         self._x = object.x
         self._y = object.y
         self._app = None
@@ -68,7 +71,7 @@ class GravitationalField(Field):
 
     def update(self, dt):
         for object in self._app.objects:
-            if object != self._object:
+            if object != self.object:
                 gf = (self.GRAVITATIONAL_CONSTANT * self._mass
                       * object.mass) / (self.radius(object) ** 2)
                 print(self.angle_between(object))
