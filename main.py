@@ -1,4 +1,4 @@
-from tau import Tau, PointMass, Vector
+from tau import *
 
 app = Tau(resizable=True)
 
