@@ -9,6 +9,7 @@ class PointMass(object):
         x: A int of the current x coordinate.
         y: A int of the current y coordinate.
         mass: A float of the mass of the object.
+        charge: A float of the charge (in electron voltes) of the object
         velocity: A Vector of the current velocity of the object.
         acceleration: A Vector of the current acceleration of the object.
         color: A tuple of RGB values to color the object.
@@ -19,6 +20,7 @@ class PointMass(object):
                  x: int,
                  y: int,
                  mass: float = 1,
+                 charge: float = 0,
                  velocity: Vector = Vector(),
                  acceleration: Vector = Vector(),
                  color=(255, 255, 255)):
