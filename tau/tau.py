@@ -7,7 +7,8 @@ class Tau:
 
     def __init__(self, *args, speed=1/60, **kwargs):
         self.speed = speed
-        self._objects = []
+        self.objects = []
+        self.fields = []
 
     def add_objects(self, *object):
         """Add objects to the simulation.
@@ -17,20 +18,23 @@ class Tau:
         Args:
             object: One or more objects.
         """
-        self._objects.extend(object)
+        self.objects.extend(object)
 
-    def __len__(self):
-        return len(self._objects)
+    def add_fields(self, *field):
+        """Add fields to the simulation.
 
-    def __getitem__(self, index):
-        if index < len(self):
-            return self._objects[index]
-        raise IndexError('Object out of range')
+        This is required to be able to properly track objects/field
+        interactions.
+
+        Args:
+            field: One or more fields.
+        """
+        self.fields.extend(field)
 
     def run(self):
         """Start simulation"""
-        for object in self._objects:
+        for object in self.objects + self.fields:
             self.push_handlers(object)
-            object.app = self
+            object._app = self
 
         # TODO: Spin off a thread to run update() methods asynchronously

@@ -1,5 +1,4 @@
 import pyglet
-import math
 from tau.vector import Vector
 
 
@@ -10,17 +9,18 @@ class PointMass(object):
         x: A int of the current x coordinate.
         y: A int of the current y coordinate.
         mass: A float of the mass of the object.
+        charge: A float of the charge (in electron voltes) of the object
         velocity: A Vector of the current velocity of the object.
         acceleration: A Vector of the current acceleration of the object.
         color: A tuple of RGB values to color the object.
             Default: (255, 255, 255)
     """
-    GRAVITATIONAL_CONSTANT = 6.673e-11
 
     def __init__(self,
                  x: int,
                  y: int,
                  mass: float = 1,
+                 charge: float = 0,
                  velocity: Vector = Vector(),
                  acceleration: Vector = Vector(),
                  color=(255, 255, 255)):
@@ -30,17 +30,14 @@ class PointMass(object):
         self.velocity = velocity
         self.acceleration = acceleration
         self.mass = mass
-        self.app = None
+        self._app = None
 
     def _move(self):
         # Apply physics
-        for object in self.app:
+        for object in self._app.objects:
             if object != self:
                 if self._has_collided(object):
                     self._handle_collisions(object)
-
-                # Apply gravity
-                self.apply_force(self.gravitational_force(object))
 
         self.velocity += self.acceleration
 
@@ -82,40 +79,3 @@ class PointMass(object):
             force: A Vector of the force to apply.
         """
         self.acceleration += force / self.mass
-
-    def distance_to(self, other: 'PointMass'):
-        """Calcualate the distance between objects.
-
-        Args:
-            other: Another PointMass object.
-
-        Returns:
-            A float of the amount of pixels between self and other.
-        """
-        return math.sqrt((other.x - self.x) ** 2 + (other.y - self.y) ** 2)
-
-    def angle_between(self, other: 'PointMass'):
-        """Calcualate the angle between objects.
-
-        Args:
-            other: Another PointMass object.
-
-        Returns:
-            A float of the angle in radians from the normal (positive y axis)
-            to other from self.
-        """
-        return math.atan2(other.x - self.x, other.y - self.y)
-
-    def gravitational_force(self, other: 'PointMass'):
-        """Calcualate the gravitational force between objects.
-
-        Args:
-            other: Another PointMass object.
-
-        Returns:
-            A float of the force in Newtons of gravity between self and other.
-        """
-        gf = (self.GRAVITATIONAL_CONSTANT * self.mass
-              * other.mass) / (self.distance_to(other) ** 2)
-        return Vector(gf * math.sin(self.angle_between(other)),
-                      gf * math.cos(self.angle_between(other)))
