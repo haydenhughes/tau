@@ -1,4 +1,4 @@
-from .tau import Tau
-from .objects import PointMass
+from .app import objects, fields, tick
 from .vector import Vector
-from .fields import GravitationalField
+from .object import PointMass
+from .field import GravitationalField

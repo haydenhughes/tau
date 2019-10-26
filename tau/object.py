@@ -1,5 +1,5 @@
-import pyglet
-from tau.vector import Vector
+from .app import objects
+from .vector import Vector
 
 
 class PointMass(object):
@@ -30,11 +30,12 @@ class PointMass(object):
         self.velocity = velocity
         self.acceleration = acceleration
         self.mass = mass
-        self._app = None
 
-    def _move(self):
+        objects.append(self)
+
+    async def _move(self):
         # Apply physics
-        for object in self._app.objects:
+        for object in objects:
             if object != self:
                 if self._has_collided(object):
                     self._handle_collisions(object)
@@ -53,20 +54,13 @@ class PointMass(object):
         return (self.x - self.velocity.x <= other.x <= self.x + self.velocity.x
                 and self.y - self.velocity.y <= other.y <= self.y + self.velocity.y)
 
-    def update(self, dt):
-        """Called every time a second passes in the simulation.
+    def __del__(self):
+        objects.remove(self)
+        del self
 
-        Args:
-            dt: The floored (rounded down) amount of whole seconds that has
-                elasped between frame refreshes. This value is generally 0.
-        """
-        self._move()
-
-    def on_draw(self):
-        """Called every frame flip by Tau"""
-        pyglet.graphics.draw(1, pyglet.gl.GL_POINTS,
-                             ('v2i', (int(self.x), int(self.y))),
-                             ('c3B', self.color))
+    async def update(self):
+        """Called every time a second passes in the simulation."""
+        await self._move()
 
     @property
     def momentum(self):

@@ -41,6 +41,9 @@ class Vector(object):
     def __truediv__(self, scaler: float):
         return Vector(self.x / scaler, self.y / scaler)
 
+    def __neg__(self):
+        return Vector(-self.x, -self.y)
+
     def __repr__(self):
         return f'x: {self.x}, y: {self.y}'
 
