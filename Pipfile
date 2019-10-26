@@ -4,10 +4,12 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pyglet = "*"
 
 [requires]
 python_version = "3.7"
+
+[dev-packages]
+pyglet = "*"
 
 [dev-packages.python-language-server]
 extras = [ "all",]
